@@ -1,0 +1,70 @@
+# Copyright 2017 The Fuchsia Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//third_party/cobalt_config/cobalt_config.gni")
+import("//topaz/runtime/dart/dart_test.gni")
+import("//topaz/runtime/flutter_runner/flutter_app.gni")
+
+cobalt_config("generate_sysui_config") {
+  project_id = 103
+}
+
+flutter_app("userpicker_base_shell") {
+  main_dart = "lib/main.dart"
+
+  meta = [
+    {
+      path = rebase_path("meta/userpicker_base_shell.cmx")
+      dest = "userpicker_base_shell.cmx"
+    },
+  ]
+
+  resources = [
+    {
+      path = rebase_path(
+              get_label_info(
+                             ":generate_sysui_config",
+                             "target_gen_dir")
+              + "/cobalt_config.pb")
+      dest = "cobalt_config.pb"
+    }
+  ]
+
+  package_name = "userpicker_base_shell"
+
+  manifest = "pubspec.yaml"
+
+  sources = [
+    "authentication_context_impl.dart",
+    "authentication_overlay.dart",
+    "authentication_overlay_model.dart",
+    "circular_button.dart",
+    "clock.dart",
+    "user_list.dart",
+    "user_picker_base_shell_model.dart",
+    "user_picker_base_shell_screen.dart",
+    "user_picker_screen.dart",
+  ]
+
+  non_dart_deps = [
+    ":generate_sysui_config",
+  ]
+
+  deps = [
+    "//garnet/public/fidl/fuchsia.timezone",
+    "//garnet/public/fidl/fuchsia.ui.input",
+    "//garnet/public/fidl/fuchsia.ui.viewsv1",
+    "//peridot/public/fidl/fuchsia.modular",
+    "//peridot/public/fidl/fuchsia.modular.auth",
+    "//third_party/dart-pkg/git/flutter/packages/flutter",
+    "//third_party/dart-pkg/pub/http",
+    "//topaz/lib/base_shell:lib.base_shell",
+    "//topaz/lib/settings:lib.settings",
+    "//topaz/public/dart/fidl",
+    "//topaz/public/dart/widgets:lib.widgets",
+    "//topaz/public/lib/app/dart",
+    "//topaz/public/lib/ui/flutter",
+    "//topaz/shell/widgets",
+  ]
+}
