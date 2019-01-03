@@ -1,0 +1,10 @@
+{
+    "program": {
+        "data": "data/home_work_agent"
+    },
+    "sandbox": {
+        "features": [ "deprecated-all-services" ],
+        "system": [ "bin", "pkgs" ],
+        "pkgfs": [ "packages" ]
+    }
+}
